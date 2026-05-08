@@ -1,13 +1,81 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Chain Reaction WEB</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <h2 id="turn">Player Turn</h2>
-        <div id="board"></div>
-        <script src="game.js"></script>
-        <script src="main.js"></script>
-    </body>
+<head>
+    <title>Chain Reaction WEB</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+
+    <div class="app">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand__title">Chain Reaction</div>
+                <div class="brand__subtitle">Web edition</div>
+            </div>
+
+            <div class="topbar__actions">
+                <button id="restartBtn" class="btn btn--ghost" type="button" style="display:none;">Restart</button>
+                <button id="newGameBtn" class="btn btn--primary" type="button">New Game</button>
+            </div>
+        </header>
+
+        <main class="layout">
+            <aside class="panel">
+                <div class="panel__section">
+                    <div class="panel__label">Current turn</div>
+                    <h2 id="turn" class="turn" style="display:none;"></h2>
+                </div>
+
+                <div class="panel__section">
+                    <div class="panel__label">Players</div>
+                    <div id="playersList" class="playersList"></div>
+                </div>
+
+                <div class="panel__section panel__section--hint">
+                    <div class="hint">
+                        Place orbs in empty cells or your own color. Cells explode when they reach capacity and spread to neighbors.
+                    </div>
+                </div>
+            </aside>
+
+            <section class="stage">
+                <div id="gameContainer" class="gameContainer" style="display:none;">
+                    <div id="board" class="board"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- SETUP MODAL -->
+        <div id="setup" class="modal">
+            <div class="modal__backdrop"></div>
+            <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="setupTitle">
+                <div class="modal__header">
+                    <div id="setupTitle" class="modal__title">New game</div>
+                    <div class="modal__subtitle">Configure players, then start.</div>
+                </div>
+
+                <div class="formRow">
+                    <label class="label" for="playerCount">Number of players</label>
+                    <select id="playerCount" class="select">
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <div id="names" class="names"></div>
+
+                <div class="modal__actions">
+                    <button class="btn btn--primary" onclick="startGame()" type="button">Start Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script src="main.js"></script>
+
+</body>
 </html>
