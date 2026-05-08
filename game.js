@@ -93,40 +93,42 @@ function placeOrb(i, j) {
 
 function explode() {
 
-    let queue = [];
+    // Use a queue with a moving head index (avoid O(n^2) shift()).
+    // Also dedupe queued cells so chain reactions don't balloon the queue.
+    const queue = [];
+    let head = 0;
+    const inQueue = new Set();
 
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
-
-            let cell = grid[i][j];
-
-            if (cell.count >= cell.neighbors.length) {
+            const cell = grid[i][j];
+            if (cell.count >= cell.neighbors.length && !inQueue.has(cell)) {
                 queue.push(cell);
+                inQueue.add(cell);
             }
         }
     }
 
-    while (queue.length > 0) {
+    while (head < queue.length) {
+        const cell = queue[head++];
+        inQueue.delete(cell);
 
-        let cell = queue.shift();
-        let limit = cell.neighbors.length;
-
+        const limit = cell.neighbors.length;
         if (cell.count < limit) continue;
 
-        let owner = cell.owner;
-
+        const owner = cell.owner;
         lastMoveExplosions++;
 
         cell.count = 0;
         cell.owner = null;
 
-        for (let n of cell.neighbors) {
-
+        for (const n of cell.neighbors) {
             n.count++;
             n.owner = owner;
 
-            if (n.count >= n.neighbors.length) {
+            if (n.count >= n.neighbors.length && !inQueue.has(n)) {
                 queue.push(n);
+                inQueue.add(n);
             }
         }
     }
