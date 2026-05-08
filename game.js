@@ -3,6 +3,14 @@ const COLS = 9;
 
 let players = ["red", "green", "blue", "yellow"];
 let currentPlayer = 0;
+let gameOver = false;
+let winnerIndex = null;
+let playerAlive = [];
+let playerHasPlayed = [];
+let totalMoves = 0;
+let totalExplosions = 0;
+let maxExplosionsInMove = 0;
+let lastMoveExplosions = 0;
 
 class Cell {
     constructor() {
@@ -21,6 +29,14 @@ function initGrid(customPlayers = null) {
     }
 
     currentPlayer = 0;
+    gameOver = false;
+    winnerIndex = null;
+    totalMoves = 0;
+    totalExplosions = 0;
+    maxExplosionsInMove = 0;
+    lastMoveExplosions = 0;
+    playerAlive = new Array(players.length).fill(true);
+    playerHasPlayed = new Array(players.length).fill(false);
     grid = [];
 
     for (let i = 0; i < ROWS; i++) {
@@ -55,14 +71,24 @@ function placeOrb(i, j) {
 
     let cell = grid[i][j];
 
-    if (cell.owner !== null && cell.owner !== players[currentPlayer]) return;
+    if (gameOver) return false;
+    if (!playerAlive[currentPlayer]) return false;
+    if (cell.owner !== null && cell.owner !== players[currentPlayer]) return false;
 
     cell.owner = players[currentPlayer];
     cell.count++;
 
-    explode();
+    playerHasPlayed[currentPlayer] = true;
+    totalMoves++;
 
-    currentPlayer = (currentPlayer + 1) % players.length;
+    lastMoveExplosions = 0;
+    explode();
+    totalExplosions += lastMoveExplosions;
+    if (lastMoveExplosions > maxExplosionsInMove) maxExplosionsInMove = lastMoveExplosions;
+
+    updateEliminationsAndWinner();
+    advanceToNextAlivePlayer();
+    return true;
 }
 
 function explode() {
@@ -89,6 +115,8 @@ function explode() {
 
         let owner = cell.owner;
 
+        lastMoveExplosions++;
+
         cell.count = 0;
         cell.owner = null;
 
@@ -102,4 +130,74 @@ function explode() {
             }
         }
     }
+}
+
+function advanceToNextAlivePlayer() {
+    if (gameOver) return;
+    if (playerAlive.every((x) => !x)) return;
+
+    let tries = 0;
+    do {
+        currentPlayer = (currentPlayer + 1) % players.length;
+        tries++;
+    } while (!playerAlive[currentPlayer] && tries <= players.length + 1);
+}
+
+function updateEliminationsAndWinner() {
+    if (!playerHasPlayed.every(Boolean)) return;
+
+    const counts = new Array(players.length).fill(0);
+
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
+            const owner = grid[i][j].owner;
+            if (!owner) continue;
+            const idx = players.indexOf(owner);
+            if (idx >= 0) counts[idx]++;
+        }
+    }
+
+    for (let p = 0; p < players.length; p++) {
+        if (!playerAlive[p]) continue;
+        if (counts[p] === 0) playerAlive[p] = false;
+    }
+
+    const aliveIdx = [];
+    for (let p = 0; p < players.length; p++) if (playerAlive[p]) aliveIdx.push(p);
+
+    if (aliveIdx.length === 1) {
+        gameOver = true;
+        winnerIndex = aliveIdx[0];
+    }
+}
+
+function getWinnerIndex() {
+    return winnerIndex;
+}
+
+function getGameStats() {
+    const perPlayer = players.map(() => ({ cells: 0, orbs: 0 }));
+
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
+            const c = grid[i][j];
+            if (!c.owner) continue;
+            const idx = players.indexOf(c.owner);
+            if (idx < 0) continue;
+            perPlayer[idx].cells += 1;
+            perPlayer[idx].orbs += c.count;
+        }
+    }
+
+    return {
+        moves: totalMoves,
+        explosions: totalExplosions,
+        maxExplosionsInMove,
+        lastMoveExplosions,
+        perPlayer,
+        alive: [...playerAlive],
+        hasPlayed: [...playerHasPlayed],
+        winnerIndex,
+        gameOver,
+    };
 }
