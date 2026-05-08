@@ -49,6 +49,27 @@ html[data-theme="light"]{
     --btnPrimaryText: #F7F7F7;
 }
 
+/* Light-theme polish for the brand lockup */
+html[data-theme="light"] .brand__title{
+    color: var(--text);
+}
+html[data-theme="light"] .brand__titleAccent{
+    /* deeper gradient for contrast on light bg */
+    background: linear-gradient(90deg, #0B5FDB 0%, #2742FF 45%, #7B2BFF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+html[data-theme="light"] .brand__badge{
+    background: rgba(10,16,32,0.06);
+    border-color: rgba(10,16,32,0.18);
+    color: rgba(10,16,32,0.92);
+}
+html[data-theme="light"] .brand__logo{
+    filter: drop-shadow(0 10px 24px rgba(10,16,32,.18));
+}
+
 *{ box-sizing:border-box; }
 
 html, body { height:100%; }
@@ -84,8 +105,65 @@ body {
 }
 
 .brand{ display:flex; flex-direction:column; line-height:1.1; }
-.brand__title{ font-weight:800; font-size:18px; letter-spacing:.2px; }
-.brand__subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+.brand__row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width: 0;
+}
+
+.brand__logo{
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
+}
+
+.brand__stack{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+}
+
+.brand__title{
+    font-weight: 950;
+    font-size: 18px;
+    letter-spacing: .2px;
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    white-space:nowrap;
+}
+
+.brand__titleAccent{
+    background: linear-gradient(90deg, #9AE6FF 0%, #5A78FF 45%, #B46BFF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 10px 32px rgba(90,120,255,.20);
+}
+
+.brand__badge{
+    font-size: 10px;
+    font-weight: 950;
+    letter-spacing: .55px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--btnBorder);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    transform: translateY(-1px);
+}
+
+.brand__subtitle{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
 
 .topbar__actions{ display:flex; gap:10px; align-items:center; }
 
