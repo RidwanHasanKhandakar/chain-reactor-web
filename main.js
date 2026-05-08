@@ -6,6 +6,11 @@ const playerCountSelect = document.getElementById("playerCount");
 const playersList = document.getElementById("playersList");
 const restartBtn = document.getElementById("restartBtn");
 const newGameBtn = document.getElementById("newGameBtn");
+const gameOverModal = document.getElementById("gameOver");
+const gameOverSubtitle = document.getElementById("gameOverSubtitle");
+const statsGrid = document.getElementById("statsGrid");
+const playAgainBtn = document.getElementById("playAgainBtn");
+const closeGameOverBtn = document.getElementById("closeGameOverBtn");
 
 let playerNames = [];
 let playerColors = ["red", "green", "blue", "yellow"];
@@ -19,6 +24,7 @@ newGameBtn?.addEventListener("click", () => {
     turnText.style.display = "none";
     restartBtn.style.display = "none";
     if (playersList) playersList.innerHTML = "";
+    hideGameOver();
 });
 
 restartBtn?.addEventListener("click", () => {
@@ -28,6 +34,19 @@ restartBtn?.addEventListener("click", () => {
     updateBoard();
     updateTurnUI();
     renderPlayersList();
+    hideGameOver();
+});
+
+playAgainBtn?.addEventListener("click", () => {
+    hideGameOver();
+    setup.style.display = "flex";
+    document.getElementById("gameContainer").style.display = "none";
+    turnText.style.display = "none";
+    restartBtn.style.display = "none";
+});
+
+closeGameOverBtn?.addEventListener("click", () => {
+    hideGameOver();
 });
 
 function updateNameInputs() {
@@ -69,6 +88,7 @@ function startGame() {
     updateTurnUI();
 
     renderPlayersList();
+    hideGameOver();
 }
 
 // BUILD BOARD
@@ -176,6 +196,7 @@ function updateTurnUI() {
     if (winner !== null && winner !== undefined) {
         turnText.innerText = "Winner: " + playerNames[winner];
         turnText.style.color = players[winner];
+        showGameOver();
         return;
     }
 
@@ -185,6 +206,8 @@ function updateTurnUI() {
 
 function renderPlayersList() {
     if (!playersList || !playerNames.length) return;
+
+    const stats = typeof getGameStats === "function" ? getGameStats() : null;
 
     playersList.innerHTML = "";
 
@@ -214,6 +237,7 @@ function renderPlayersList() {
         const meta = document.createElement("div");
         meta.className = "playerMeta";
         if (isOut) meta.textContent = "OUT";
+        else if (stats?.perPlayer?.[i]) meta.textContent = `${stats.perPlayer[i].cells} cells • ${stats.perPlayer[i].orbs} orbs`;
         else meta.textContent = i === currentPlayer ? "Now" : "";
 
         pill.appendChild(left);
@@ -221,4 +245,47 @@ function renderPlayersList() {
 
         playersList.appendChild(pill);
     }
+}
+
+function showGameOver() {
+    if (!gameOverModal) return;
+    const stats = typeof getGameStats === "function" ? getGameStats() : null;
+    const winner = typeof getWinnerIndex === "function" ? getWinnerIndex() : null;
+
+    if (winner === null || winner === undefined) return;
+
+    if (gameOverSubtitle) {
+        gameOverSubtitle.textContent = `${playerNames[winner]} wins in ${stats?.moves ?? 0} moves`;
+        gameOverSubtitle.style.color = players[winner];
+    }
+
+    if (statsGrid && stats) {
+        statsGrid.innerHTML = "";
+        addStat("Total moves", String(stats.moves));
+        addStat("Total explosions", String(stats.explosions));
+        addStat("Biggest chain", String(stats.maxExplosionsInMove));
+        addStat("Last move chain", String(stats.lastMoveExplosions));
+    }
+
+    gameOverModal.style.display = "flex";
+}
+
+function hideGameOver() {
+    if (!gameOverModal) return;
+    gameOverModal.style.display = "none";
+}
+
+function addStat(label, value) {
+    if (!statsGrid) return;
+    const card = document.createElement("div");
+    card.className = "stat";
+    const l = document.createElement("div");
+    l.className = "stat__label";
+    l.textContent = label;
+    const v = document.createElement("div");
+    v.className = "stat__value";
+    v.textContent = value;
+    card.appendChild(l);
+    card.appendChild(v);
+    statsGrid.appendChild(card);
 }
