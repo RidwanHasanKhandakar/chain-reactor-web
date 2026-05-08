@@ -376,34 +376,76 @@ body {
 }
 
 /* FOOTER */
-/* FOOTER */
-.footer {
-    padding: 18px 16px 24px 16px;
-    text-align: center;
+.footer{
+    padding: 18px 16px 26px 16px;
     color: var(--muted);
     font-size: 12px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.25px;
 }
 
-/* base link style */
-.footer a {
+.footer__inner{
+    max-width: 1200px;
+    margin: 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--surfaceA), var(--surfaceB));
+    box-shadow: var(--shadow);
+}
+
+.footer__credits{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width: 0;
+}
+
+.footer__label{
     color: var(--muted);
-    text-decoration: none;
-    border-bottom: 1px dotted currentColor;
-    margin-left: 6px;
-    transition: all 0.2s ease;
+    font-weight: 800;
 }
 
-/* hover effect */
-.footer a:hover {
-    color: #e1306c; /* Instagram pink highlight */
-    border-bottom: 1px solid #e1306c;
-}
-
-/* optional: author name emphasis */
-#authorName {
+.footer__author{
     color: var(--text);
-    font-weight: 600;
+    font-weight: 900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.footer__social{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--btnBorder);
+    color: var(--text);
+    background: var(--btnBg);
+    text-decoration:none;
+    font-weight: 900;
+    transition: transform .12s ease, background .18s ease, border-color .18s ease;
+}
+.footer__social:hover{
+    transform: translateY(-1px);
+    background: var(--btnBgHover);
+    border-color: var(--border);
+}
+.footer__social:active{ transform: translateY(0px) scale(.99); }
+
+@media (max-width: 520px){
+    .footer__inner{
+        flex-direction:column;
+        align-items:stretch;
+    }
+    .footer__social{
+        width:100%;
+    }
 }
 .stat{
     border:1px solid rgba(255,255,255,0.10);
