@@ -178,7 +178,7 @@ function updateBoard() {
             let cell = grid[i][j];
             let div = cells[index];
 
-            div.style.background = "rgba(255,255,255,0.04)";
+            div.style.background = "var(--cellBg)";
             div.innerHTML = "";
 
             if (cell.owner) {
@@ -199,7 +199,7 @@ function updateBoard() {
                 div.style.color = "#fff";
                 div.style.textShadow = "0 1px 0 rgba(0,0,0,.35)";
             } else {
-                div.style.color = "rgba(234,240,255,.80)";
+                div.style.color = "var(--cellEmptyText)";
                 div.style.textShadow = "none";
             }
 

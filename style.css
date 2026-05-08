@@ -14,6 +14,7 @@
 
     --boardBg: rgba(0,0,0,0.18);
     --cellBg: rgba(255,255,255,0.04);
+    --cellEmptyText: rgba(234,240,255,.80);
 
     --btnBg: rgba(255,255,255,.08);
     --btnBgHover: rgba(255,255,255,.12);
@@ -21,6 +22,9 @@
 
     --btnPrimaryBg: rgba(90,120,255,.90);
     --btnPrimaryText: #0A1020;
+
+    /* top header */
+    --topbarBg: rgba(7,10,16,.55);
 }
 
 html[data-theme="light"]{
@@ -36,9 +40,10 @@ html[data-theme="light"]{
     --surfaceB: rgba(255,255,255,.86);
     --surfaceFlat: rgba(255,255,255,.92);
 
-    /* keep cells dark */
-    --boardBg: rgba(10,16,32,.06);
-    --cellBg: rgba(22,26,32,.86);
+    /* light board/cells: eggshell */
+    --boardBg: rgba(244,241,234,.55);
+    --cellBg: rgba(244,241,234,.92);
+    --cellEmptyText: rgba(10,16,32,.70);
 
     /* solid buttons */
     --btnBg: rgba(10,16,32,.08);
@@ -47,6 +52,9 @@ html[data-theme="light"]{
 
     --btnPrimaryBg: rgba(10,16,32,.92);
     --btnPrimaryText: #F7F7F7;
+
+    /* top header */
+    --topbarBg: rgba(244,241,234,.72);
 }
 
 /* Light-theme polish for the brand lockup */
@@ -100,7 +108,7 @@ body {
     gap:16px;
     padding:14px 16px;
     border-bottom:1px solid var(--border);
-    background:rgba(7,10,16,.55);
+    background: var(--topbarBg);
     backdrop-filter: blur(14px);
 }
 
