@@ -376,19 +376,34 @@ body {
 }
 
 /* FOOTER */
-.footer{
+/* FOOTER */
+.footer {
     padding: 18px 16px 24px 16px;
-    text-align:center;
+    text-align: center;
     color: var(--muted);
-    font-size:12px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
 }
-.footer a{
-    color: inherit;
+
+/* base link style */
+.footer a {
+    color: var(--muted);
     text-decoration: none;
     border-bottom: 1px dotted currentColor;
+    margin-left: 6px;
+    transition: all 0.2s ease;
 }
-.footer a:hover{
+
+/* hover effect */
+.footer a:hover {
+    color: #e1306c; /* Instagram pink highlight */
+    border-bottom: 1px solid #e1306c;
+}
+
+/* optional: author name emphasis */
+#authorName {
     color: var(--text);
+    font-weight: 600;
 }
 .stat{
     border:1px solid rgba(255,255,255,0.10);
