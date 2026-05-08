@@ -1,13 +1,52 @@
 :root{
+    --radius:16px;
+
+    /* theme tokens */
     --bg0:#070A10;
-    --bg1:#0B1020;
-    --panel:#0E162B;
-    --panel2:#0B1224;
     --text:#EAF0FF;
     --muted:#9AA7C2;
     --border:rgba(255,255,255,0.10);
     --shadow: 0 20px 60px rgba(0,0,0,.55);
-    --radius:16px;
+
+    --surfaceA: rgba(14,22,43,.92);
+    --surfaceB: rgba(11,18,36,.92);
+    --surfaceFlat: rgba(255,255,255,0.05);
+
+    --boardBg: rgba(0,0,0,0.18);
+    --cellBg: rgba(255,255,255,0.04);
+
+    --btnBg: rgba(255,255,255,.08);
+    --btnBgHover: rgba(255,255,255,.12);
+    --btnBorder: rgba(255,255,255,.14);
+
+    --btnPrimaryBg: rgba(90,120,255,.90);
+    --btnPrimaryText: #0A1020;
+}
+
+html[data-theme="light"]{
+    /* eggshell / off-white */
+    --bg0:#F4F1EA;
+    --text:#0E1426;
+    --muted:#4B5872;
+    --border:rgba(10,16,32,0.14);
+    --shadow: 0 18px 48px rgba(10,16,32,.18);
+
+    /* light UI surfaces (so text stays visible) */
+    --surfaceA: rgba(255,255,255,.92);
+    --surfaceB: rgba(255,255,255,.86);
+    --surfaceFlat: rgba(255,255,255,.92);
+
+    /* keep cells dark */
+    --boardBg: rgba(10,16,32,.06);
+    --cellBg: rgba(22,26,32,.86);
+
+    /* solid buttons */
+    --btnBg: rgba(10,16,32,.08);
+    --btnBgHover: rgba(10,16,32,.12);
+    --btnBorder: rgba(10,16,32,.18);
+
+    --btnPrimaryBg: rgba(10,16,32,.92);
+    --btnPrimaryText: #F7F7F7;
 }
 
 *{ box-sizing:border-box; }
@@ -21,6 +60,8 @@ body {
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     color: var(--text);
 }
+
+.btn, .cell, select, input { touch-action: manipulation; }
 
 .app{
     min-height:100%;
@@ -50,20 +91,21 @@ body {
 
 .btn{
     appearance:none;
-    border:1px solid var(--border);
+    border:1px solid var(--btnBorder);
     border-radius:12px;
     padding:10px 12px;
     font-weight:700;
     color:var(--text);
-    background:rgba(255,255,255,.06);
+    background: var(--btnBg);
     cursor:pointer;
     transition: transform .12s ease, background .18s ease, border-color .18s ease;
 }
-.btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.18); }
+.btn:hover{ transform: translateY(-1px); background: var(--btnBgHover); border-color: var(--border); }
 .btn:active{ transform: translateY(0px) scale(.99); }
 .btn--primary{
-    border-color: rgba(90,120,255,.55);
-    background: linear-gradient(180deg, rgba(90,120,255,.35), rgba(90,120,255,.18));
+    border-color: var(--btnBorder);
+    background: var(--btnPrimaryBg);
+    color: var(--btnPrimaryText);
 }
 .btn--ghost{
     background: transparent;
@@ -83,7 +125,7 @@ body {
 .panel{
     border:1px solid var(--border);
     border-radius: var(--radius);
-    background: linear-gradient(180deg, rgba(14,22,43,.92), rgba(11,18,36,.92));
+    background: linear-gradient(180deg, var(--surfaceA), var(--surfaceB));
     box-shadow: var(--shadow);
     overflow:hidden;
 }
@@ -140,7 +182,7 @@ body {
 }
 
 .hint{
-    color:rgba(234,240,255,.78);
+    color: var(--muted);
     font-size:12px;
     line-height:1.35;
 }
@@ -157,31 +199,26 @@ body {
     padding:6px 0;
 }
 
-/* TURN */
-#turn {
-    /* handled by .turn now */
-}
-
 /* BOARD */
 .board, #board {
     display: grid;
-    grid-template-columns: repeat(9, min(10vw, 60px));
-    grid-template-rows: repeat(6, min(10vw, 60px));
+    grid-template-columns: repeat(9, min(9.6vw, 56px));
+    grid-template-rows: repeat(6, min(9.6vw, 56px));
     justify-content: center;
     margin-top: 4px;
     gap: 6px;
     padding: 14px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    background: rgba(0,0,0,0.18);
+    background: var(--boardBg);
     box-shadow: var(--shadow);
 }
 
 /* CELL */
 .cell {
-    width: min(10vw, 60px);
-    height: min(10vw, 60px);
-    background: rgba(255,255,255,0.04);
+    width: min(9.6vw, 56px);
+    height: min(9.6vw, 56px);
+    background: var(--cellBg);
     border: 2px solid var(--turnBorder, rgba(255,255,255,0.10));
     border-radius: 12px;
 
@@ -252,7 +289,7 @@ body {
     width:min(520px, 100%);
     border-radius: 18px;
     border:1px solid rgba(255,255,255,0.12);
-    background: linear-gradient(180deg, rgba(14,22,43,.96), rgba(11,18,36,.96));
+    background: linear-gradient(180deg, var(--surfaceA), var(--surfaceB));
     box-shadow: var(--shadow);
     overflow:hidden;
 }
@@ -282,7 +319,7 @@ body {
     padding:10px 10px;
     border-radius:12px;
     border:1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.06);
+    background: var(--surfaceFlat);
     color: var(--text);
     outline:none;
 }
@@ -298,7 +335,7 @@ body {
     padding:11px 12px;
     border-radius:12px;
     border:1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.06);
+    background: var(--surfaceFlat);
     color: var(--text);
     outline:none;
 }
@@ -310,6 +347,24 @@ body {
     .stage{ order: 1; }
 }
 
+@media (max-width: 460px){
+    .layout{ padding:12px; gap:12px; }
+    .topbar{ padding:12px 12px; }
+
+    .board, #board{
+        gap: 4px;
+        padding: 10px;
+        grid-template-columns: repeat(9, min(9.2vw, 44px));
+        grid-template-rows: repeat(6, min(9.2vw, 44px));
+    }
+    .cell{
+        width: min(9.2vw, 44px);
+        height: min(9.2vw, 44px);
+        border-width: 2px;
+        font-size: 14px;
+    }
+}
+
 /* STATS */
 .stats{
     padding: 12px 16px 6px 16px;
@@ -318,6 +373,22 @@ body {
     display:grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap:10px;
+}
+
+/* FOOTER */
+.footer{
+    padding: 18px 16px 24px 16px;
+    text-align:center;
+    color: var(--muted);
+    font-size:12px;
+}
+.footer a{
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted currentColor;
+}
+.footer a:hover{
+    color: var(--text);
 }
 .stat{
     border:1px solid rgba(255,255,255,0.10);

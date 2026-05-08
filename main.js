@@ -6,6 +6,7 @@ const playerCountSelect = document.getElementById("playerCount");
 const playersList = document.getElementById("playersList");
 const restartBtn = document.getElementById("restartBtn");
 const newGameBtn = document.getElementById("newGameBtn");
+const themeToggle = document.getElementById("themeToggle");
 const gameOverModal = document.getElementById("gameOver");
 const gameOverSubtitle = document.getElementById("gameOverSubtitle");
 const statsGrid = document.getElementById("statsGrid");
@@ -15,8 +16,16 @@ const closeGameOverBtn = document.getElementById("closeGameOverBtn");
 let playerNames = [];
 let playerColors = ["red", "green", "blue", "yellow"];
 
+initTheme();
+
 // setup inputs
 playerCountSelect.addEventListener("change", updateNameInputs);
+
+themeToggle?.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    const next = current === "light" ? "dark" : "light";
+    setTheme(next);
+});
 
 newGameBtn?.addEventListener("click", () => {
     setup.style.display = "flex";
@@ -60,6 +69,26 @@ function updateNameInputs() {
             <input class="input" id="p${i}" placeholder="Player ${i + 1} name" autocomplete="off">
         `;
     }
+}
+
+function initTheme() {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") {
+        setTheme(stored);
+        return;
+    }
+
+    const prefersLight =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches;
+    setTheme(prefersLight ? "light" : "dark");
+}
+
+function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    if (themeToggle) themeToggle.textContent = theme === "light" ? "Light" : "Dark";
 }
 
 updateNameInputs();
